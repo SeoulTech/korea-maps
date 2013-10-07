@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body, #map_canvas { height: 100%; margin: 0;}
+    </style>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="http://d3js.org/topojson.v0.min.js"></script>
+    <script src="GeoJSON.js"></script>
+    <script>
+ 
+      initialize = function(){
+        var mapOptions = {
+          center: new google.maps.LatLng(36.75649, 127.547836),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+ 
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+ 
+	$.getJSON('regions.topojson', function (data) {
+	    var state_geojson = topojson.object(data, data.objects.state);
+	    var city_geojson = topojson.object(data, data.objects.city);
+	    var dong_geojson = topojson.object(data, data.objects.dong);
+ 
+	    var style = {
+		strokeColor: 'blue',
+		strokeWeight: 2,
+		fillColor: 'black',
+		fillOpacity: 0.1,
+	    };
+	    var states = new GeoJSON(state_geojson, style);
+ 
+            //restyle for cities
+            style.strokeWeight = 1;
+            style.strokeColor = 'red';
+	    var cities = new GeoJSON(city_geojson, style);
+
+	    //restyle for dong
+	    style.strokeWeight = 1;
+	    style.strokeColor = 'green';
+	    var dongs = new GeoJSON(dong_geojson, style);
+
+	    addGeometries(dongs);
+	    addGeometries(cities);
+            addGeometries(states);
+            
+	});
+ 
+        addGeometries = function(overlays, style){
+          $.each(overlays, function(i, overlay){
+            if (!overlay.length) {
+		overlay.setMap(map);
+            } else {
+              // recurse for multigeoms
+	      addGeometries(overlay)
+            }
+          })
+        }
+      }
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+  </body>
+</html>
