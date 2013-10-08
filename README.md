@@ -23,7 +23,9 @@ $ ./make.sh
 ```
 
 ### Simplified Regional Boundary on Google Map.
-It requires Python to run.
+Visit here(http://www.station3.co.kr/korea-maps).
+
+Or run on the local machine(It requires Python).
 
 ```bash
 $ ./run.sh
