@@ -26,7 +26,6 @@ $ ./make.sh
 It requires Python to run.
 
 ```bash
-$ cd sample
 $ ./run.sh
 ```
 
